@@ -39,13 +39,15 @@ const Navigation = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="sm">
-              <UserCircle className="w-4 h-4 mr-2" />
-              Sign In
-            </Button>
-            <Button variant="hero" size="sm" asChild>
-              <Link to="/login">Start Free Trial</Link>
-            </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/login">
+                  <UserCircle className="w-4 h-4 mr-2" />
+                  Sign In
+                </Link>
+              </Button>
+              <Button variant="hero" size="sm" asChild>
+                <Link to="/signup">Start Free Trial</Link>
+              </Button>
           </div>
 
           {/* Mobile menu button */}

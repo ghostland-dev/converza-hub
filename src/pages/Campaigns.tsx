@@ -18,6 +18,7 @@ import {
   Copy,
   Trash2
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import DashboardLayout from "@/components/DashboardLayout";
 
 const Campaigns = () => {
@@ -127,9 +128,8 @@ const Campaigns = () => {
               <BarChart3 className="w-4 h-4 mr-2" />
               Analytics
             </Button>
-            <Button variant="hero" size="sm">
-              <Plus className="w-4 h-4 mr-2" />
-              New Campaign
+            <Button variant="hero" size="sm" asChild>
+              <Link to="/campaigns/create">New Campaign</Link>
             </Button>
           </div>
         </div>
@@ -344,9 +344,11 @@ const Campaigns = () => {
                   Use our AI-powered campaign builder to create high-converting email and SMS sequences.
                 </p>
               </div>
-              <Button variant="hero" size="lg">
-                <Plus className="w-4 h-4 mr-2" />
-                Create New Campaign
+              <Button variant="hero" size="lg" asChild>
+                <Link to="/campaigns/create">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create New Campaign
+                </Link>
               </Button>
             </div>
           </CardContent>

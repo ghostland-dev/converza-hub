@@ -145,10 +145,10 @@ const Login = () => {
 
             {/* Sign Up Link */}
             <div className="text-center text-sm">
-              <span className="text-muted-foreground">Don't have an account? </span>
-              <Link to="/signup" className="text-primary hover:underline font-medium">
-                Sign up for free
-              </Link>
+                  <span className="text-muted-foreground">Don't have an account? </span>
+                  <Link to="/signup" className="text-primary hover:underline font-medium">
+                    Sign up for free
+                  </Link>
             </div>
           </CardContent>
         </Card>

@@ -14,6 +14,7 @@ import {
   Search,
   Bell
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import DashboardLayout from "@/components/DashboardLayout";
 
 const Dashboard = () => {
@@ -124,9 +125,11 @@ const Dashboard = () => {
               <Download className="w-4 h-4 mr-2" />
               Export
             </Button>
-            <Button variant="hero" size="sm">
-              <Plus className="w-4 h-4 mr-2" />
-              New Campaign
+            <Button variant="hero" size="sm" asChild>
+              <Link to="/campaigns/create">
+                <Plus className="w-4 h-4 mr-2" />
+                New Campaign
+              </Link>
             </Button>
           </div>
         </div>
@@ -274,10 +277,12 @@ const Dashboard = () => {
                   <BarChart3 className="w-4 h-4 mr-2" />
                   View Analytics
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+              <Button variant="outline" className="w-full justify-start" asChild>
+                <Link to="/templates">
                   <Mail className="w-4 h-4 mr-2" />
                   Email Templates
-                </Button>
+                </Link>
+              </Button>
               </CardContent>
             </Card>
 
