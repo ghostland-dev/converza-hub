@@ -3,20 +3,25 @@ import DashboardLayout from '@/components/DashboardLayout';
 import { DataTable } from '@/components/DataTable';
 import { FormWithValidation } from '@/components/FormWithValidation';
 import { StatsCard } from '@/components/StatsCard';
+import { BulkActions } from '@/components/BulkActions';
+import { EmptyState } from '@/components/EmptyState';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { 
   Users, 
   UserPlus, 
   Star, 
   TrendingUp,
-  Plus
+  Plus,
+  Upload
 } from 'lucide-react';
 
 const Leads = () => {
   const [isAddLeadOpen, setIsAddLeadOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const leads = [
     {
@@ -82,6 +87,22 @@ const Leads = () => {
   ];
 
   const columns = [
+    {
+      key: 'select' as any,
+      label: '',
+      render: (_: any, item: any) => (
+        <Checkbox
+          checked={selectedIds.includes(item.id.toString())}
+          onCheckedChange={(checked) => {
+            if (checked) {
+              setSelectedIds([...selectedIds, item.id.toString()]);
+            } else {
+              setSelectedIds(selectedIds.filter(id => id !== item.id.toString()));
+            }
+          }}
+        />
+      ),
+    },
     {
       key: 'name' as keyof typeof leads[0],
       label: 'Name',
@@ -225,11 +246,32 @@ const Leads = () => {
         </div>
 
         {/* Data Table */}
-        <DataTable
-          data={leads}
-          columns={columns}
-          searchPlaceholder="Search leads by name, email, or company..."
-          itemsPerPage={10}
+        {leads.length > 0 ? (
+          <DataTable
+            data={leads}
+            columns={columns}
+            searchPlaceholder="Search leads by name, email, or company..."
+            itemsPerPage={10}
+          />
+        ) : (
+          <EmptyState
+            icon={Users}
+            title="No leads found"
+            description="Start building your pipeline by adding your first lead or importing from a CSV file."
+            actionLabel="Add Lead"
+            onAction={() => setIsAddLeadOpen(true)}
+            secondaryActionLabel="Import Leads"
+            onSecondaryAction={() => {/* Handle import */}}
+            showSearch={true}
+            showFilters={true}
+          />
+        )}
+
+        {/* Bulk Actions */}
+        <BulkActions
+          selectedIds={selectedIds}
+          onClearSelection={() => setSelectedIds([])}
+          entityType="leads"
         />
       </div>
     </DashboardLayout>

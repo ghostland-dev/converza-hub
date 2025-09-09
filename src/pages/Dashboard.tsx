@@ -2,6 +2,7 @@ import React from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import { StatsCard } from '@/components/StatsCard';
 import { InteractiveChart } from '@/components/InteractiveChart';
+import { ActivityFeed } from '@/components/ActivityFeed';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -177,7 +178,7 @@ const Dashboard = () => {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-4 gap-8">
           {/* Recent Leads */}
           <div className="lg:col-span-2">
             <Card className="bg-gradient-card border-border/50">
@@ -305,30 +306,11 @@ const Dashboard = () => {
               </Button>
               </CardContent>
             </Card>
+          </div>
 
-            {/* Notifications */}
-            <Card className="bg-gradient-card border-border/50">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center">
-                  <Bell className="w-4 h-4 mr-2" />
-                  Notifications
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="text-sm">
-                  <div className="font-medium">New high-score lead</div>
-                  <div className="text-muted-foreground">Sophie Martin scored 95 points</div>
-                </div>
-                <div className="text-sm">
-                  <div className="font-medium">Campaign completed</div>
-                  <div className="text-muted-foreground">"Spring Promotion" finished</div>
-                </div>
-                <div className="text-sm">
-                  <div className="font-medium">Monthly report ready</div>
-                  <div className="text-muted-foreground">March analytics available</div>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Activity Feed */}
+          <div>
+            <ActivityFeed limit={8} />
           </div>
         </div>
       </div>

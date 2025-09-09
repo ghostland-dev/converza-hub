@@ -15,6 +15,7 @@ import EmailTemplates from "./pages/EmailTemplates";
 import WorkflowBuilder from "./pages/WorkflowBuilder";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
+import Integrations from "./pages/Integrations";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/templates" element={<EmailTemplates />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/integrations" element={<Integrations />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

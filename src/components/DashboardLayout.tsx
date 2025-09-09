@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { GlobalSearch } from "@/components/GlobalSearch";
+import { NotificationCenter } from "@/components/NotificationCenter";
 import { 
   LayoutDashboard, 
   Users, 
@@ -10,9 +12,11 @@ import {
   Bell,
   User,
   Menu,
-  X
+  X,
+  FileText,
+  Zap
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 interface DashboardLayoutProps {
@@ -21,15 +25,31 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
 
   const navigation = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Leads", href: "/leads", icon: Users },
     { name: "Campaigns", href: "/campaigns", icon: Mail },
+    { name: "Workflows", href: "/workflows", icon: Zap },
+    { name: "Templates", href: "/templates", icon: FileText },
     { name: "Analytics", href: "/analytics", icon: BarChart3 },
     { name: "Settings", href: "/settings", icon: Settings },
   ];
+
+  // Keyboard shortcut for search (Cmd+K / Ctrl+K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const isActive = (href: string) => location.pathname === href;
 
@@ -128,22 +148,22 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
           {/* Search */}
           <div className="flex-1 max-w-md">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-              <input
-                type="text"
-                placeholder="Search leads, campaigns..."
-                className="w-full pl-10 pr-4 py-2 text-sm bg-muted/20 border border-border/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50"
-              />
-            </div>
+            <Button
+              variant="outline"
+              className="w-full justify-start text-left text-muted-foreground hover:text-foreground"
+              onClick={() => setSearchOpen(true)}
+            >
+              <Search className="mr-3 h-4 w-4" />
+              Search leads, campaigns...
+              <kbd className="ml-auto hidden sm:inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+                <span className="text-xs">⌘</span>K
+              </kbd>
+            </Button>
           </div>
 
           {/* Right side actions */}
           <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
-            </Button>
+            <NotificationCenter />
             
             <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
               <User className="w-4 h-4 text-primary-foreground" />
@@ -156,6 +176,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           {children}
         </main>
       </div>
+
+      {/* Global Search Modal */}
+      <GlobalSearch 
+        isOpen={searchOpen} 
+        onClose={() => setSearchOpen(false)} 
+      />
     </div>
   );
 };
