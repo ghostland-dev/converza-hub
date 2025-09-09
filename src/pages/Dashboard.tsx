@@ -1,57 +1,50 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import React from 'react';
+import DashboardLayout from '@/components/DashboardLayout';
+import { StatsCard } from '@/components/StatsCard';
+import { InteractiveChart } from '@/components/InteractiveChart';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Link } from 'react-router-dom';
 import { 
   Users, 
-  TrendingUp, 
-  Target, 
   Mail, 
-  BarChart3, 
+  TrendingUp, 
+  Target,
   Calendar,
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Star,
+  ArrowRight,
+  DollarSign,
+  Activity,
   Plus,
   Filter,
   Download,
   Search,
-  Bell
-} from "lucide-react";
-import { Link } from "react-router-dom";
-import DashboardLayout from "@/components/DashboardLayout";
+  Bell,
+  BarChart3
+} from 'lucide-react';
 
 const Dashboard = () => {
-  // Mock data for demonstration
-  const stats = [
-    {
-      title: "Total Leads",
-      value: "12,847",
-      change: "+12.5%",
-      trend: "up",
-      icon: Users,
-      color: "text-primary"
-    },
-    {
-      title: "Qualified Leads",
-      value: "3,421",
-      change: "+8.2%",
-      trend: "up",
-      icon: Target,
-      color: "text-secondary"
-    },
-    {
-      title: "Conversion Rate",
-      value: "26.6%",
-      change: "+3.1%",
-      trend: "up",
-      icon: TrendingUp,
-      color: "text-primary-glow"
-    },
-    {
-      title: "Email Opens",
-      value: "89.2%",
-      change: "+5.4%",
-      trend: "up",
-      icon: Mail,
-      color: "text-secondary-hover"
-    }
+  const chartData = [
+    { name: 'Jan', value: 400 },
+    { name: 'Feb', value: 300 },
+    { name: 'Mar', value: 600 },
+    { name: 'Apr', value: 800 },
+    { name: 'May', value: 700 },
+    { name: 'Jun', value: 900 },
+    { name: 'Jul', value: 1200 },
+  ];
+
+  const conversionData = [
+    { name: 'Website', value: 35 },
+    { name: 'LinkedIn', value: 25 },
+    { name: 'Referrals', value: 20 },
+    { name: 'Events', value: 15 },
+    { name: 'Cold Email', value: 5 },
   ];
 
   const recentLeads = [
@@ -134,26 +127,53 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Stats Grid */}
+        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, index) => (
-            <Card key={index} className="bg-gradient-card border-border/50 hover:shadow-glow transition-all duration-300">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  {stat.title}
-                </CardTitle>
-                <stat.icon className={`w-5 h-5 ${stat.color}`} />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold mb-1">{stat.value}</div>
-                <div className="flex items-center text-sm">
-                  <TrendingUp className="w-3 h-3 mr-1 text-secondary" />
-                  <span className="text-secondary">{stat.change}</span>
-                  <span className="text-muted-foreground ml-1">from last month</span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+          <StatsCard
+            title="Total Leads"
+            value="2,847"
+            icon={Users}
+            trend={{ value: 12, isPositive: true }}
+            description="vs last month"
+          />
+          <StatsCard
+            title="Conversion Rate"
+            value="23.8%"
+            icon={TrendingUp}
+            trend={{ value: 4.2, isPositive: true }}
+            description="leads to customers"
+          />
+          <StatsCard
+            title="Active Campaigns"
+            value="12"
+            icon={Mail}
+            trend={{ value: 2, isPositive: true }}
+            description="running campaigns"
+          />
+          <StatsCard
+            title="Revenue Generated"
+            value="$184k"
+            icon={DollarSign}
+            trend={{ value: 18, isPositive: true }}
+            description="this quarter"
+          />
+        </div>
+
+        {/* Charts and Analytics */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <InteractiveChart
+            title="Lead Generation Trend"
+            data={chartData}
+            type="line"
+            color="#3b82f6"
+            showPeriodToggle={true}
+          />
+          
+          <InteractiveChart
+            title="Lead Sources Distribution"
+            data={conversionData}
+            type="pie"
+          />
         </div>
 
         {/* Main Content Grid */}

@@ -1,77 +1,68 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import React, { useState } from 'react';
+import DashboardLayout from '@/components/DashboardLayout';
+import { InteractiveChart } from '@/components/InteractiveChart';
+import { StatsCard } from '@/components/StatsCard';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { 
-  BarChart3, 
   TrendingUp, 
-  TrendingDown,
+  TrendingDown, 
   Users, 
   Mail, 
   Target,
   Calendar,
+  BarChart3,
+  PieChart,
+  LineChart,
+  DollarSign,
+  MousePointer,
+  Eye,
+  UserPlus,
   Download,
   Filter,
   RefreshCw
-} from "lucide-react";
-import DashboardLayout from "@/components/DashboardLayout";
+} from 'lucide-react';
 
 const Analytics = () => {
-  // Mock analytics data
-  const kpis = [
-    {
-      title: "Total Leads Generated",
-      value: "12,847",
-      change: "+12.5%",
-      trend: "up",
-      icon: Users,
-      color: "text-primary"
-    },
-    {
-      title: "Lead Conversion Rate",
-      value: "26.6%",
-      change: "+3.1%",
-      trend: "up",
-      icon: Target,
-      color: "text-secondary"
-    },
-    {
-      title: "Email Open Rate",
-      value: "31.2%",
-      change: "-1.8%",
-      trend: "down",
-      icon: Mail,
-      color: "text-primary-glow"
-    },
-    {
-      title: "Customer Acquisition Cost",
-      value: "€47",
-      change: "-8.4%",
-      trend: "up",
-      icon: TrendingUp,
-      color: "text-secondary-hover"
-    }
+  const [selectedPeriod, setSelectedPeriod] = useState('30d');
+
+  const periods = [
+    { value: '7d', label: '7 Days' },
+    { value: '30d', label: '30 Days' },
+    { value: '90d', label: '90 Days' },
+    { value: '1y', label: '1 Year' },
   ];
 
-  const leadSources = [
-    { name: "LinkedIn", leads: 4250, percentage: 33.1, color: "bg-blue-500" },
-    { name: "Website", leads: 3180, percentage: 24.8, color: "bg-primary" },
-    { name: "Google Ads", leads: 2840, percentage: 22.1, color: "bg-green-500" },
-    { name: "Referrals", leads: 1620, percentage: 12.6, color: "bg-secondary" },
-    { name: "Facebook", leads: 957, percentage: 7.4, color: "bg-purple-500" }
+  const leadTrendData = [
+    { name: 'Week 1', value: 120 },
+    { name: 'Week 2', value: 150 },
+    { name: 'Week 3', value: 180 },
+    { name: 'Week 4', value: 220 },
   ];
 
-  const monthlyData = [
-    { month: "Oct", leads: 8420, conversions: 2104, revenue: 45200 },
-    { month: "Nov", leads: 9250, conversions: 2315, revenue: 52100 },
-    { month: "Dec", leads: 11200, conversions: 2800, revenue: 63400 },
-    { month: "Jan", leads: 12847, conversions: 3421, revenue: 78200 }
+  const conversionData = [
+    { name: 'Leads', value: 1000 },
+    { name: 'Qualified', value: 450 },
+    { name: 'Proposals', value: 180 },
+    { name: 'Customers', value: 75 },
   ];
 
-  const campaignPerformance = [
-    { name: "Spring Launch", sent: 15420, opened: 4467, clicked: 892, converted: 134, roi: 340 },
-    { name: "Lead Nurturing", sent: 8920, opened: 3502, clicked: 701, converted: 89, roi: 280 },
-    { name: "Webinar Promo", sent: 5340, opened: 2080, clicked: 416, converted: 62, roi: 220 },
-    { name: "Holiday Offer", sent: 2180, opened: 1294, clicked: 259, converted: 41, roi: 190 }
+  const sourceData = [
+    { name: 'Website', value: 35 },
+    { name: 'LinkedIn', value: 28 },
+    { name: 'Referrals', value: 20 },
+    { name: 'Events', value: 12 },
+    { name: 'Cold Email', value: 5 },
+  ];
+
+  const campaignData = [
+    { name: 'Q1 Launch', value: 320 },
+    { name: 'Spring Sale', value: 280 },
+    { name: 'Product Demo', value: 190 },
+    { name: 'Webinar Series', value: 150 },
+    { name: 'Newsletter', value: 120 },
   ];
 
   return (
@@ -90,14 +81,18 @@ const Analytics = () => {
           </div>
           
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
-            <Button variant="outline" size="sm">
-              <Calendar className="w-4 h-4 mr-2" />
-              Last 30 days
-            </Button>
-            <Button variant="outline" size="sm">
-              <Filter className="w-4 h-4 mr-2" />
-              Filter
-            </Button>
+            <div className="flex gap-1">
+              {periods.map((period) => (
+                <Button
+                  key={period.value}
+                  variant={selectedPeriod === period.value ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedPeriod(period.value)}
+                >
+                  {period.label}
+                </Button>
+              ))}
+            </div>
             <Button variant="outline" size="sm">
               <RefreshCw className="w-4 h-4 mr-2" />
               Refresh
@@ -109,220 +104,188 @@ const Analytics = () => {
           </div>
         </div>
 
-        {/* KPI Cards */}
+        {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {kpis.map((kpi, index) => (
-            <Card key={index} className="bg-gradient-card border-border/50 hover:shadow-glow transition-all duration-300">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  {kpi.title}
-                </CardTitle>
-                <kpi.icon className={`w-5 h-5 ${kpi.color}`} />
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold mb-2">{kpi.value}</div>
-                <div className="flex items-center text-sm">
-                  {kpi.trend === "up" ? (
-                    <TrendingUp className="w-3 h-3 mr-1 text-green-500" />
-                  ) : (
-                    <TrendingDown className="w-3 h-3 mr-1 text-red-500" />
-                  )}
-                  <span className={kpi.trend === "up" ? "text-green-500" : "text-red-500"}>
-                    {kpi.change}
-                  </span>
-                  <span className="text-muted-foreground ml-1">vs last month</span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+          <StatsCard
+            title="Total Leads"
+            value="2,847"
+            icon={Users}
+            trend={{ value: 12, isPositive: true }}
+            description="vs last period"
+          />
+          <StatsCard
+            title="Conversion Rate"
+            value="23.8%"
+            icon={Target}
+            trend={{ value: 4.2, isPositive: true }}
+            description="leads to customers"
+          />
+          <StatsCard
+            title="Campaign ROI"
+            value="340%"
+            icon={TrendingUp}
+            trend={{ value: 18, isPositive: true }}
+            description="return on investment"
+          />
+          <StatsCard
+            title="Avg Deal Size"
+            value="$2,450"
+            icon={DollarSign}
+            trend={{ value: 2.1, isPositive: false }}
+            description="per closed deal"
+          />
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Lead Sources */}
-          <Card className="bg-gradient-card border-border/50">
-            <CardHeader>
-              <CardTitle className="text-xl">Lead Sources</CardTitle>
-              <CardDescription>
-                Where your leads are coming from this month
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {leadSources.map((source, index) => (
-                <div key={index} className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-3 h-3 rounded-full ${source.color}`}></div>
-                      <span className="font-medium">{source.name}</span>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-semibold">{source.leads.toLocaleString()}</div>
-                      <div className="text-xs text-muted-foreground">{source.percentage}%</div>
-                    </div>
-                  </div>
-                  <Progress value={source.percentage} className="h-2" />
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+        {/* Tabbed Analytics */}
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
+            <TabsTrigger value="sources">Sources</TabsTrigger>
+            <TabsTrigger value="funnel">Funnel</TabsTrigger>
+          </TabsList>
 
-          {/* Monthly Trends */}
-          <div className="lg:col-span-2">
+          <TabsContent value="overview" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <InteractiveChart
+                title="Lead Generation Trend"
+                data={leadTrendData}
+                type="line"
+                color="#3b82f6"
+                showPeriodToggle={true}
+              />
+              
+              <InteractiveChart
+                title="Conversion Funnel"
+                data={conversionData}
+                type="bar"
+                color="#10b981"
+              />
+            </div>
+            
+            <InteractiveChart
+              title="Lead Sources Distribution"
+              data={sourceData}
+              type="pie"
+            />
+          </TabsContent>
+
+          <TabsContent value="campaigns" className="space-y-6">
+            <InteractiveChart
+              title="Campaign Performance"
+              data={campaignData}
+              type="bar"
+              color="#8b5cf6"
+              showPeriodToggle={true}
+            />
+          </TabsContent>
+
+          <TabsContent value="sources" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <InteractiveChart
+                title="Lead Sources Distribution"
+                data={sourceData}
+                type="pie"
+              />
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <StatsCard
+                  title="Website Visitors"
+                  value="12,847"
+                  icon={Eye}
+                  trend={{ value: 8, isPositive: true }}
+                  description="unique visitors"
+                />
+                <StatsCard
+                  title="Click-through Rate"
+                  value="3.2%"
+                  icon={MousePointer}
+                  trend={{ value: 0.5, isPositive: true }}
+                  description="email campaigns"
+                />
+                <StatsCard
+                  title="Social Engagement"
+                  value="847"
+                  icon={UserPlus}
+                  trend={{ value: 15, isPositive: true }}
+                  description="new followers"
+                />
+                <StatsCard
+                  title="Referral Traffic"
+                  value="23%"
+                  icon={Users}
+                  trend={{ value: 5, isPositive: true }}
+                  description="of total visits"
+                />
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="funnel" className="space-y-6">
+            {/* Conversion Funnel */}
             <Card className="bg-gradient-card border-border/50">
               <CardHeader>
-                <CardTitle className="text-xl">Monthly Performance</CardTitle>
+                <CardTitle className="text-xl">Conversion Funnel</CardTitle>
                 <CardDescription>
-                  Lead generation and conversion trends over time
+                  Track how leads move through your sales process
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
-                  {monthlyData.map((data, index) => (
-                    <div key={index} className="grid grid-cols-4 gap-4 p-4 rounded-lg bg-muted/20">
-                      <div className="text-center">
-                        <div className="text-sm text-muted-foreground">Month</div>
-                        <div className="text-lg font-bold">{data.month}</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-sm text-muted-foreground">Leads</div>
-                        <div className="text-lg font-bold text-primary">{data.leads.toLocaleString()}</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-sm text-muted-foreground">Conversions</div>
-                        <div className="text-lg font-bold text-secondary">{data.conversions.toLocaleString()}</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-sm text-muted-foreground">Revenue</div>
-                        <div className="text-lg font-bold text-primary-glow">€{data.revenue.toLocaleString()}</div>
-                      </div>
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+                  <div className="text-center space-y-4">
+                    <div className="w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center mx-auto">
+                      <Users className="w-8 h-8 text-primary-foreground" />
                     </div>
-                  ))}
+                    <div>
+                      <div className="text-2xl font-bold">12,847</div>
+                      <div className="text-sm text-muted-foreground">Total Leads</div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center space-y-4">
+                    <div className="w-20 h-20 bg-gradient-secondary rounded-full flex items-center justify-center mx-auto">
+                      <Target className="w-8 h-8 text-secondary-foreground" />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold">8,921</div>
+                      <div className="text-sm text-muted-foreground">Qualified (69.4%)</div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center space-y-4">
+                    <div className="w-20 h-20 bg-primary-glow/20 border-2 border-primary-glow rounded-full flex items-center justify-center mx-auto">
+                      <Mail className="w-8 h-8 text-primary-glow" />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold">5,847</div>
+                      <div className="text-sm text-muted-foreground">Engaged (65.6%)</div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center space-y-4">
+                    <div className="w-20 h-20 bg-secondary-hover/20 border-2 border-secondary-hover rounded-full flex items-center justify-center mx-auto">
+                      <TrendingUp className="w-8 h-8 text-secondary-hover" />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold">3,421</div>
+                      <div className="text-sm text-muted-foreground">Opportunities (58.5%)</div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center space-y-4">
+                    <div className="w-20 h-20 bg-primary/20 border-2 border-primary rounded-full flex items-center justify-center mx-auto">
+                      <Target className="w-8 h-8 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold">910</div>
+                      <div className="text-sm text-muted-foreground">Customers (26.6%)</div>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </div>
-
-        {/* Campaign Performance */}
-        <Card className="bg-gradient-card border-border/50">
-          <CardHeader>
-            <CardTitle className="text-xl">Campaign Performance</CardTitle>
-            <CardDescription>
-              Detailed metrics for your active and recent campaigns
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-border/50">
-                    <th className="text-left py-3 px-4 font-medium text-muted-foreground">Campaign</th>
-                    <th className="text-center py-3 px-4 font-medium text-muted-foreground">Sent</th>
-                    <th className="text-center py-3 px-4 font-medium text-muted-foreground">Opened</th>
-                    <th className="text-center py-3 px-4 font-medium text-muted-foreground">Clicked</th>
-                    <th className="text-center py-3 px-4 font-medium text-muted-foreground">Converted</th>
-                    <th className="text-center py-3 px-4 font-medium text-muted-foreground">ROI</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {campaignPerformance.map((campaign, index) => (
-                    <tr key={index} className="border-b border-border/50 hover:bg-muted/10">
-                      <td className="py-4 px-4">
-                        <div className="font-medium">{campaign.name}</div>
-                      </td>
-                      <td className="text-center py-4 px-4">
-                        <div className="font-semibold">{campaign.sent.toLocaleString()}</div>
-                      </td>
-                      <td className="text-center py-4 px-4">
-                        <div className="font-semibold text-primary">{campaign.opened.toLocaleString()}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {((campaign.opened / campaign.sent) * 100).toFixed(1)}%
-                        </div>
-                      </td>
-                      <td className="text-center py-4 px-4">
-                        <div className="font-semibold text-secondary">{campaign.clicked.toLocaleString()}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {((campaign.clicked / campaign.opened) * 100).toFixed(1)}%
-                        </div>
-                      </td>
-                      <td className="text-center py-4 px-4">
-                        <div className="font-semibold text-primary-glow">{campaign.converted}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {((campaign.converted / campaign.clicked) * 100).toFixed(1)}%
-                        </div>
-                      </td>
-                      <td className="text-center py-4 px-4">
-                        <div className="font-semibold text-secondary-hover">{campaign.roi}%</div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Conversion Funnel */}
-        <Card className="bg-gradient-card border-border/50">
-          <CardHeader>
-            <CardTitle className="text-xl">Conversion Funnel</CardTitle>
-            <CardDescription>
-              Track how leads move through your sales process
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-              <div className="text-center space-y-4">
-                <div className="w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center mx-auto">
-                  <Users className="w-8 h-8 text-primary-foreground" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">12,847</div>
-                  <div className="text-sm text-muted-foreground">Total Leads</div>
-                </div>
-              </div>
-              
-              <div className="text-center space-y-4">
-                <div className="w-20 h-20 bg-gradient-secondary rounded-full flex items-center justify-center mx-auto">
-                  <Target className="w-8 h-8 text-secondary-foreground" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">8,921</div>
-                  <div className="text-sm text-muted-foreground">Qualified (69.4%)</div>
-                </div>
-              </div>
-              
-              <div className="text-center space-y-4">
-                <div className="w-20 h-20 bg-primary-glow/20 border-2 border-primary-glow rounded-full flex items-center justify-center mx-auto">
-                  <Mail className="w-8 h-8 text-primary-glow" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">5,847</div>
-                  <div className="text-sm text-muted-foreground">Engaged (65.6%)</div>
-                </div>
-              </div>
-              
-              <div className="text-center space-y-4">
-                <div className="w-20 h-20 bg-secondary-hover/20 border-2 border-secondary-hover rounded-full flex items-center justify-center mx-auto">
-                  <TrendingUp className="w-8 h-8 text-secondary-hover" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">3,421</div>
-                  <div className="text-sm text-muted-foreground">Opportunities (58.5%)</div>
-                </div>
-              </div>
-              
-              <div className="text-center space-y-4">
-                <div className="w-20 h-20 bg-primary/20 border-2 border-primary rounded-full flex items-center justify-center mx-auto">
-                  <Target className="w-8 h-8 text-primary" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">910</div>
-                  <div className="text-sm text-muted-foreground">Customers (26.6%)</div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </DashboardLayout>
   );
