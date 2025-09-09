@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { UserCircle, Menu } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
   return (
@@ -42,8 +43,8 @@ const Navigation = () => {
               <UserCircle className="w-4 h-4 mr-2" />
               Sign In
             </Button>
-            <Button variant="hero" size="sm">
-              Start Free Trial
+            <Button variant="hero" size="sm" asChild>
+              <Link to="/login">Start Free Trial</Link>
             </Button>
           </div>
 
