@@ -6,20 +6,50 @@ import { Separator } from "@/components/ui/separator";
 import { Eye, EyeOff, Mail, Lock, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { SEOHead } from "@/components/SEOHead";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement authentication
-    console.log("Login attempt:", { email, password });
+    setIsLoading(true);
+    
+    try {
+      // TODO: Implement actual authentication
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
+      
+      toast({
+        title: "Login successful",
+        description: "Welcome back to LeadFlow!",
+      });
+      
+      // Redirect to dashboard
+      window.location.href = "/dashboard";
+    } catch (error) {
+      toast({
+        title: "Login failed",
+        description: "Please check your credentials and try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center p-4">
+    <>
+      <SEOHead
+        title="Sign In to LeadFlow | Lead Management Platform"
+        description="Sign in to your LeadFlow account to access your leads, campaigns, and analytics. Secure login to your professional lead management dashboard."
+        canonicalUrl={`${window.location.origin}/login`}
+      />
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center p-4">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-hero opacity-5"></div>
       <div className="absolute top-20 left-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
@@ -109,8 +139,14 @@ const Login = () => {
               </div>
 
               {/* Submit Button */}
-              <Button type="submit" variant="hero" size="lg" className="w-full">
-                Sign In
+              <Button 
+                type="submit" 
+                variant="hero" 
+                size="lg" 
+                className="w-full"
+                disabled={isLoading}
+              >
+                {isLoading ? "Signing In..." : "Sign In"}
               </Button>
             </form>
 
@@ -162,6 +198,7 @@ const Login = () => {
         </p>
       </div>
     </div>
+    </>
   );
 };
 

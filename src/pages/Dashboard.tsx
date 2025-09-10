@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
+import { measurePageLoad, preloadCriticalResources } from '@/utils/performance';
+import { SEOHead } from '@/components/SEOHead';
 import { StatsCard } from '@/components/StatsCard';
 import { InteractiveChart } from '@/components/InteractiveChart';
 import { ActivityFeed } from '@/components/ActivityFeed';
@@ -30,6 +32,11 @@ import {
 } from 'lucide-react';
 
 const Dashboard = () => {
+  // Initialize performance monitoring
+  useEffect(() => {
+    measurePageLoad();
+    preloadCriticalResources();
+  }, []);
   const chartData = [
     { name: 'Jan', value: 400 },
     { name: 'Feb', value: 300 },
@@ -99,7 +106,13 @@ const Dashboard = () => {
   };
 
   return (
-    <DashboardLayout>
+    <>
+      <SEOHead
+        title="Dashboard | LeadFlow - Lead Management Platform"
+        description="Manage your leads, campaigns, and analytics from your LeadFlow dashboard. Track performance, view lead insights, and optimize your sales process."
+        canonicalUrl={`${window.location.origin}/dashboard`}
+      />
+      <DashboardLayout>
       <div className="space-y-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -315,6 +328,7 @@ const Dashboard = () => {
         </div>
       </div>
     </DashboardLayout>
+    </>
   );
 };
 
